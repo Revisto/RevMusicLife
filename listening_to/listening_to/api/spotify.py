@@ -11,9 +11,12 @@ dotenv.load_dotenv()
 
 class Spotify:
 
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(Spotify, cls).__new__(cls)
+        return cls.instance
+
     def __init__(self):
-        self.a = randint(0,11111111)
-        print(self.a)
         self.base_url = "https://api.spotify.com/"
         self.AUTH_CODE = os.getenv('AUTH_CODE')
         self.CLIENT_ID = os.getenv('CLIENT_ID')
