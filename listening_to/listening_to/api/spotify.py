@@ -3,11 +3,12 @@ import dotenv
 import os
 from spotipy.oauth2 import SpotifyOAuth
 import datetime
-from random import randint
+import schedule
+import time
+import threading
+
 
 dotenv.load_dotenv()
-
-
 
 class Spotify:
 
@@ -18,39 +19,61 @@ class Spotify:
 
     def __init__(self):
         self.base_url = "https://api.spotify.com/"
-        self.AUTH_CODE = os.getenv('AUTH_CODE')
         self.CLIENT_ID = os.getenv('CLIENT_ID')
         self.CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-        self.sp_oauth = SpotifyOAuth(client_id=self.CLIENT_ID, client_secret=self.CLIENT_SECRET, redirect_uri=' ')
-        self.refresh_access_token()
+        self.SCOPE = "ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private"
+        # self.CACHE_PATH = "spotify_cache.txt" # if testing and debugging spotify.py file
+        self.CACHE_PATH = "listening_to/api/spotify_cache.txt"
+        self.sp_oauth = SpotifyOAuth(client_id=self.CLIENT_ID, client_secret=self.CLIENT_SECRET, redirect_uri='http://localhost:8080', cache_path=self.CACHE_PATH)
+        self.set_token_info()
+        # Run Spotify Access Code Refresher Cronjob In Background
+        self.spotify_refresher_thread = threading.Thread(target=self.run_access_code_refresher)
+        self.spotify_refresher_thread.daemon = True  # Set the thread as daemon to exit when the main thread exits
+        self.spotify_refresher_thread.start()  # Start the cron job thread
 
-    def token_expired_decorator(func):
+
+    def is_access_token_about_to_expire_decorator(func):
         def wrapper(self, *args, **kwargs):
-            if self.is_access_token_expired():
+            if self.is_access_token_about_to_expire():
                 self.refresh_access_token()
             return func(self, *args, **kwargs)
         return wrapper
 
 
-    def get_token_info(self):
-        token_info = self.sp_oauth.get_access_token(self.AUTH_CODE)
-        return token_info
+    def run_access_code_refresher(self):
+        schedule.every(50).minutes.do(self.refresh_access_token)
 
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
+    def get_token_info(self):
+        token_info = self.sp_oauth.get_cached_token()
+        return token_info
+    
+    def set_token_info(self):
+        token_info = self.get_token_info()
+        self.TOKEN_INFO = token_info["refresh_token"]
+        self.EXPIRES_AT = token_info["expires_at"]
+        self.ACCESS_TOKEN = token_info["access_token"]
+        self.REFRESH_TOKEN = token_info["refresh_token"]
+        return True
 
     def refresh_access_token(self):
-        self.token_info = self.get_token_info()
-        self.ACCESS_TOKEN = self.token_info["access_token"]
+        self.sp_oauth.refresh_access_token(self.REFRESH_TOKEN)
+        self.set_token_info()
 
-    def is_access_token_expired(self):
-        expires_at = self.token_info['expires_at']
+    def is_access_token_about_to_expire(self):
+        expires_at = self.EXPIRES_AT
 
         if expires_at:
+            expires_at -= 60
             expires_at = datetime.datetime.fromtimestamp(float(expires_at))
             return expires_at <= datetime.datetime.now()
 
         return True
 
-    @token_expired_decorator
+    @is_access_token_about_to_expire_decorator
     def make_request(self, endpoint, method='GET', params=None, headers=None, data=None):
         url = self.base_url + endpoint
         headers = headers or {}
