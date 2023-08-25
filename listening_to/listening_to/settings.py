@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'listening_to'
+    'listening_to',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
