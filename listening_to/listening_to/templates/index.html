@@ -14,7 +14,7 @@
         <div class="player__top">
           <div class="player-cover">
             <transition-group :name="transitionName">
-                <div class="player-cover__item" v-if="$index === currentTrackIndex" :style="{ backgroundImage: `url(${track.cover})` }"  v-for="(track, $index) in tracks" :key="$index"></div>
+                <div class="player-cover__item" v-if="$index === currentTrackIndex" style="background-image: url('');"></div>
             </transition-group>
           </div>
           <div class="player-controls">
@@ -23,25 +23,25 @@
                 <use xlink:href="#icon-heart-o"></use>
               </svg>
             </div>
-            <a :href="currentTrack.url" target="_blank" class="player-controls__item">
+            <a href="" target="_blank" id="songLink" class="player-controls__item">
               <svg class="icon">
                 <use xlink:href="#icon-link"></use>
               </svg>
             </a>
-            <div class="player-controls__item" @click="prevTrack">
+            <div class="player-controls__item">
               <svg class="icon">
                 <use xlink:href="#icon-prev"></use>
               </svg>
             </div>
-            <div class="player-controls__item" @click="nextTrack">
+            <div class="player-controls__item">
               <svg class="icon">
                 <use xlink:href="#icon-next"></use>
               </svg>
             </div>
-            <div class="player-controls__item -xl js-play" @click="play">
+            <div class="player-controls__item -xl js-play">
               <svg class="icon">
-                <use xlink:href="#icon-pause" v-if="isTimerPlaying"></use>
-                <use xlink:href="#icon-play" v-else></use>
+                <use xlink:href="#icon-pause" id="pauseButton" v-if="isTimerPlaying"></use>
+                <use xlink:href="#icon-play" id="resumeButton"  style="display: none;" v-else></use>
               </svg>
             </div>
           </div>
@@ -49,15 +49,15 @@
         <div class="progress" ref="progress">
           <div class="progress__top">
             <div class="album-info" v-if="currentTrack">
-              <div class="album-info__name">{{ currentTrack.artist }}</div>
-              <div class="album-info__track">{{ currentTrack.name }}</div>
+              <div class="album-info__name"></div>
+              <div class="album-info__track"></div>
             </div>
-            <div class="progress__duration">{{ duration }}</div>
+            <div class="progress__duration" id="duration"></div>
           </div>
-          <div class="progress__bar" @click="clickProgress">
-            <div class="progress__current" :style="{ width : barWidth }"></div>
+          <div class="progress__bar">
+            <div class="progress__current" style="width: 0%"></div>
           </div>
-          <div class="progress__time">{{ currentTime }}</div>
+          <div class="progress__time"></div>
         </div>
         <div v-cloak></div>
       </div>
@@ -116,8 +116,6 @@
         </symbol>
       </defs>
     </svg>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script><script  src="static/script.js"></script>
-
+  <script  src="static/script.js"></script>
 </body>
 </html>

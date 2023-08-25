@@ -94,6 +94,7 @@ class Spotify:
         cover_url = response['item']['album']['images'][0]['url']
         duration_ms = response['item']['duration_ms']
         progress_ms = response['progress_ms']
+        is_playing = response['is_playing']
 
         current_track_info = {
             "id": track_id,
@@ -102,7 +103,13 @@ class Spotify:
             "link": link,
             "cover_url": cover_url,
             "duration_ms": duration_ms,
-            "progress_ms": progress_ms
+            "progress_ms": progress_ms,
+            "is_playing": is_playing
         }
 
         return current_track_info
+    
+
+    def new_feature(self):
+        response = self.make_request("v1/me/player/currently-playing")
+        return response
