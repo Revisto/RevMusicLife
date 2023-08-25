@@ -1,4 +1,17 @@
-  // Function to fetch API and update HTML
+const bar1Elements = document.getElementsByClassName('bar1');
+const bar2Elements = document.getElementsByClassName('bar2');
+const bar3Elements = document.getElementsByClassName('bar3');
+
+// Merge the collections
+const mergedElements = Array.from(bar1Elements)
+  .concat(Array.from(bar2Elements))
+  .concat(Array.from(bar3Elements));
+
+  for (let i = 0; i < mergedElements.length; i++) {
+    mergedElements[i].style.animation = 'none';
+  }
+
+// Function to fetch API and update HTML
 function convertMsToMMSS(ms) {
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
@@ -12,13 +25,27 @@ function convertMsToMMSS(ms) {
 function togglePauseResume(pauseState) {
   const pauseButton = document.getElementById('pauseButton'); // Replace with the ID of your pause button element
   const resumeButton = document.getElementById('resumeButton'); // Replace with the ID of your resume button element
+  const bar1Elements = document.getElementsByClassName('bar1');
+  const bar2Elements = document.getElementsByClassName('bar2');
+  const bar3Elements = document.getElementsByClassName('bar3');
 
+  // Merge the collections
+  const mergedElements = Array.from(bar1Elements)
+    .concat(Array.from(bar2Elements))
+    .concat(Array.from(bar3Elements));
+    
   if (pauseState) {
     pauseButton.style.display = 'inline';
     resumeButton.style.display = 'none';
+    for (let i = 0; i < mergedElements.length; i++) {
+      mergedElements[i].removeAttribute('style');
+    }
   } else {
     pauseButton.style.display = 'none';
     resumeButton.style.display = 'inline';
+    for (let i = 0; i < mergedElements.length; i++) {
+      mergedElements[i].style.animation = 'none';
+    }
   }
 }
 function fetchDataAndUpdate() {
@@ -42,3 +69,6 @@ function fetchDataAndUpdate() {
 
 // Fetch data every second
 setInterval(fetchDataAndUpdate, 1000);
+
+
+
