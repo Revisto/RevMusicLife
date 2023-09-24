@@ -21,5 +21,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.listening_to),
+    path('top-tracks', views.top_tracks),
     path('api/', include('listening_to.api.urls')),
 ]

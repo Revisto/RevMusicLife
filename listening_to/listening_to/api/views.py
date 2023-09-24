@@ -10,5 +10,5 @@ def currently_playing_song(request):
 
 
 @api_view(['GET'])
-def new_feature(request):
-    return Response(spotify.new_feature())
+def top_tracks(request):
+    return Response(spotify.top_tracks())

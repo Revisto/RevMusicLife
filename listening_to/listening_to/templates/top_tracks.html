@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Rev's Spotify Top Songs</title>
+  <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+  <style>
+@font-face {
+  font-family: 'CircularBook';
+  src: url('https://samratcliffe.github.io/fonts/circular-book.woff') format('woff2'), 
+  url('https://samratcliffe.github.io/fonts/circular-book.ttf')  format('truetype');
+}
+@font-face {
+  font-family: 'CircularBlack';
+  src: url('https://samratcliffe.github.io/fonts/circular-black.woff') format('woff2'), 
+  url('https://samratcliffe.github.io/fonts/circular-black.ttf')  format('truetype');
+}
+@font-face {
+  font-family: 'CircularLight';
+  src: url('https://samratcliffe.github.io/fonts/circular-light.woff') format('woff2'), 
+  url('https://samratcliffe.github.io/fonts/circular-light.ttf')  format('truetype');
+}
+</style><link rel='stylesheet' href='https://volt.fm/assets/stylesheets/index.css?v348'><link rel="stylesheet" href="static/top_tracks/style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="flex flex-col min-h-screen" data-reactroot="">
+  <div class="grow">
+
+    <div>
+      <div class="h-32 md:h-24"></div>
+
+      <div class="mytable">
+        <div class="flex justify-between items-end md:flex-col md:items-start">
+          <div class="text">
+
+            <h2 class="font-extrabold text-4xl sm:text-3xl">Top Songs <span>This Month</span></h2>
+          </div>
+          
+        </div>
+        <div>
+          <div>
+
+            <div class="h-10"></div>
+            <div class="flex justify-between md:flex-col-reverse">
+              <div class="w-1/2 md:w-full">
+                <div class="grid grid-cols-1 gap-y-3">
+                  
+                  {% block top_tracks %}
+                    {% for track in top_tracks.items %}
+                    <div class="flex group">
+                      <div class="mt-0.5 w-8 flex shrink-0 justify-end sm:w-4"><span class="font-extrabold text-xl text-gray-300 sm:text-lg">{{ forloop.counter }}</span></div>
+                      <div class="w-4 shrink-0"></div>
+                      <div class="w-8 h-8 relative shrink-0 bg-gray-700 rounded bg-cover bg-center" style="background-image:url({{ track.album.images.2.url }})"></div>
+                      <div class="w-4 shrink-0"></div>
+                      <div class="flex flex-col"><span class="h-0.5"></span>
+                        <div><a href="{{ track.external_urls.spotify }}" class="link-underlined mr-5 text-xl external-text sm:text-lg">{{ track.name }}</a><span class="text-gray-100"><a href="{{ track.album.artists.0.external_urls.spotify }}" class="link-underlined external-text">{{ track.album.artists.0.name }}</a></span></div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  {% endblock %}
+                  
+                </div>
+              </div>
+              <div class="w-2/5 md:w-full">
+                <div class="h-6 md:h-0"></div>
+                <div class="max-w-lg relative min-h-80 md:max-w-sm md:mx-auto md:min-h-52"><a href="{{ top_tracks.items.1.external_urls.spotify }}" class="w-64 h-64 absolute left-0 top-10 shrink-0 bg-gray-700 bg-cover bg-center rounded-lg shadow-xl transition duration-300 md:w-36 md:h-36 hover:scale-102 hover:-translate-x-16 hover:-rotate-1" style="background-image:url({{ top_tracks.items.1.album.images.0.url }})"></a><a href="{{ top_tracks.items.2.external_urls.spotify }}" class="w-64 h-64 absolute right-0 top-10 shrink-0 bg-gray-700 bg-cover bg-center rounded-lg shadow-xl transition duration-300 md:w-36 md:h-36 hover:scale-102 hover:translate-x-16 hover:rotate-1" style="background-image:url({{ top_tracks.items.2.album.images.0.url }})"></a><a href="{{ top_tracks.items.0.external_urls.spotify }}" class="w-80 h-80 absolute left-0 right-0 top-0 mx-auto shrink-0 bg-gray-700 bg-cover bg-center rounded-lg shadow-xl transition duration-300 md:w-52 md:h-52 hover:scale-102" style="background-image:url({{ top_tracks.items.0.album.images.0.url }})"></a></div>
+                <div class="md:h-12"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<!-- partial -->
+  <script src='https://volt.fm/assets/scripts/common.js?v348'></script>
+<script src='https://volt.fm/assets/scripts/user.js?v348'></script>
+</body>
+</html>

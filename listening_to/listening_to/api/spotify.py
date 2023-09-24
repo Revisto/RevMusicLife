@@ -110,6 +110,6 @@ class Spotify:
         return current_track_info
     
 
-    def new_feature(self):
-        response = self.make_request("v1/me/player/currently-playing")
+    def top_tracks(self):
+        response = self.make_request("v1/me/top/tracks?time_range=short_term&limit=20")
         return response
