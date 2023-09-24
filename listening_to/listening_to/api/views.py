@@ -7,3 +7,8 @@ spotify = Spotify()
 @api_view(['GET'])
 def currently_playing_song(request):
     return Response(spotify.currently_playing())
+
+
+@api_view(['GET'])
+def new_feature(request):
+    return Response(spotify.new_feature())
